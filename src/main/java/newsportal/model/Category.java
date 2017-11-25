@@ -14,5 +14,6 @@ import java.util.List;
 public class Category extends AbstractPersistable<Long>{
     private String name;
 
+    @ManyToMany
     private List<News> newsPosts;
 }

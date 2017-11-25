@@ -17,6 +17,7 @@ public class News extends AbstractPersistable<Long>{
     private String content;
     private LocalDateTime publishTime;
 
+    @OneToOne
     private ImageFile image;
 
     @ManyToMany(mappedBy = "newsPosts")
