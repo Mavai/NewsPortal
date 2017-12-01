@@ -8,6 +8,6 @@ public class DeafultController {
 
     @RequestMapping("/")
     public String index() {
-        return "index";
+        return "redirect:/news";
     }
 }

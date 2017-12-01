@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NewsPortal</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+<body>
+<header th:replace="base :: header"></header>
+
+<div class="container">
+    <br>
+    <br>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <h2 th:text="${newsItem.title}">Title</h2>
+
+            <h4 th:text="${newsItem.lead}">Lead</h4>
+
+            <p th:text="${newsItem.content}">Content</p>
+
+            <div th:if="${newsItem.image != null}">
+                <img th:src="@{/images/{id}(id=${newsItem.image.id})}"/>
+            </div>
+        </div>
+        <div class="col">
+            <h5>Categories</h5>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="category : ${newsItem.categories}">
+                    <p th:text="${category.name}"></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <form th:action="@{/news/{id}(id=${newsItem.id})}" th:method="DELETE">
+        <button type="submit" class="btn btn-danger btn mr-auto">Delete</button>
+    </form>
+</div>
+
+<div th:replace="base :: scripts"></div>
+</body>
+</html>

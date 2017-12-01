@@ -15,5 +15,5 @@ public class User extends AbstractPersistable<Long>{
     private String name;
 
     @ManyToMany
-    private List<News> newsPosts;
+    private List<News> newsItems;
 }
