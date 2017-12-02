@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @NoArgsConstructor
@@ -15,7 +15,7 @@ public class News implements Serializable{
     private String title;
     private String lead;
     private String content;
-    private LocalDateTime publishTime;
+    private LocalDate publishTime;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Service
@@ -27,6 +28,7 @@ public class NewsService {
         newsItem.setTitle(title);
         newsItem.setLead(lead);
         newsItem.setContent(content);
+        newsItem.setPublishTime(LocalDate.now());
         addCategories(newsItem, categories);
         addImage(newsItem, image);
         return newsItem;
@@ -43,11 +45,13 @@ public class NewsService {
     }
 
     private void addCategories(News newsItem, ArrayList<Long> categories) {
-        for (Long categoryId : categories) {
-            newsItem.setCategories(new ArrayList<>());
-            Category category = categoryRepository.getOne(categoryId);
-            newsItem.getCategories().add(category);
-            category.getNewsItems().add(newsItem);
+        if (categories != null) {
+            for (Long categoryId : categories) {
+                newsItem.setCategories(new ArrayList<>());
+                Category category = categoryRepository.getOne(categoryId);
+                newsItem.getCategories().add(category);
+                category.getNewsItems().add(newsItem);
+            }
         }
     }
 }

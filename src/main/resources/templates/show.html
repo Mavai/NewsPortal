@@ -20,6 +20,7 @@
             <h2 th:text="${newsItem.title}">Title</h2>
 
             <h4 th:text="${newsItem.lead}">Lead</h4>
+            <p th:text="'Published: ' + ${newsItem.publishTime}"></p>
 
             <p th:text="${newsItem.content}">Content</p>
 

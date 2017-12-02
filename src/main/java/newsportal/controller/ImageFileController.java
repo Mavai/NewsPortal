@@ -14,7 +14,7 @@ public class ImageFileController {
     ImageFileRepository imageFileRepository;
 
 
-    @GetMapping(path = "images/{id}", produces = "image/jpg, image/png")
+    @GetMapping(path = "images/{id}", produces = {"image/jpg", "image/png"})
     @ResponseBody
     public byte[] get(@PathVariable Long id) {
         return imageFileRepository.getOne(id).getContent();

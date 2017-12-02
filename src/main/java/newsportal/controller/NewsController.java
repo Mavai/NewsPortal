@@ -44,19 +44,21 @@ public class NewsController {
 
     @Transactional
     @PostMapping("/news/new")
-    public String create(@RequestParam String title, @RequestParam ArrayList<Long> categories, @RequestParam String lead,
+    public String create(@RequestParam String title, @RequestParam(required = false) ArrayList<Long> categories, @RequestParam String lead,
                          @RequestParam String content, @RequestParam MultipartFile image) throws IOException {
         News newsItem = newsService.createNewsItem(title, categories, lead, content, image);
         newsRepository.save(newsItem);
         return "redirect:/news";
     }
 
+    @Transactional
     @GetMapping("/news/{id}")
     public String show(@PathVariable Long id, Model model) {
         News newsItem = newsRepository.getOne(id);
         model.addAttribute("newsItem", newsItem);
         model.addAttribute("categories", categoryRepository.findAll());
         return "show";
+
     }
 
     @DeleteMapping("/news/{id}")
