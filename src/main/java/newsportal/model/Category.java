@@ -19,6 +19,6 @@ public class Category implements Serializable {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<News> newsItems;
 }

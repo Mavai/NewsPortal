@@ -22,9 +22,6 @@
                 <li class="list-group-item" th:each="newsItem : ${latestNews}">
                     <h3><a th:href="@{/news/{id}(id=${newsItem.id})}" th:text="${newsItem.title}"></a></h3>
                     <p th:text="${newsItem.lead}"></p>
-                    <div th:if="${newsItem.image != null}">
-                        <img th:src="@{/images/{id}(id=${newsItem.image.id})}"/>
-                    </div>
                 </li>
             </ul>
         </div>

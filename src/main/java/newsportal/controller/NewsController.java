@@ -1,13 +1,14 @@
 package newsportal.controller;
 
 import newsportal.model.Category;
-import newsportal.model.ImageFile;
 import newsportal.model.News;
 import newsportal.repository.CategoryRepository;
 import newsportal.repository.ImageFileRepository;
 import newsportal.repository.NewsRepository;
 import newsportal.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,8 @@ public class NewsController {
 
     @GetMapping("/news")
     public String list(Model model) {
-        model.addAttribute("news", newsRepository.findAll());
+        model.addAttribute("latestNews", newsRepository.findAll(PageRequest.of(0, 10, Sort.Direction.DESC, "publishTime", "views")));
+        model.addAttribute("topNews", newsRepository.findAll(PageRequest.of(0, 10, Sort.Direction.DESC, "views")));
         model.addAttribute("categories", categoryRepository.findAll());
         return "index";
     }
@@ -45,8 +47,8 @@ public class NewsController {
     @Transactional
     @PostMapping("/news/new")
     public String create(@RequestParam String title, @RequestParam(required = false) ArrayList<Long> categories, @RequestParam String lead,
-                         @RequestParam String content, @RequestParam MultipartFile image) throws IOException {
-        News newsItem = newsService.createNewsItem(title, categories, lead, content, image);
+                         @RequestParam String content, @RequestParam MultipartFile image, @RequestParam(required = false) String writer) {
+        News newsItem = newsService.createNewsItem(title, categories, lead, content, image, writer);
         newsRepository.save(newsItem);
         return "redirect:/news";
     }
@@ -55,10 +57,10 @@ public class NewsController {
     @GetMapping("/news/{id}")
     public String show(@PathVariable Long id, Model model) {
         News newsItem = newsRepository.getOne(id);
+        newsItem.incrementViews();
         model.addAttribute("newsItem", newsItem);
         model.addAttribute("categories", categoryRepository.findAll());
         return "show";
-
     }
 
     @DeleteMapping("/news/{id}")
@@ -69,5 +71,22 @@ public class NewsController {
         }
         newsRepository.deleteById(id);
         return "redirect:/news";
+    }
+
+    @GetMapping("/news/{id}/edit")
+    public String editForm(@PathVariable Long id, Model model) {
+        News newsItem = newsRepository.getOne(id);
+        model.addAttribute("newsItem", newsItem);
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "form";
+    }
+
+    @Transactional
+    @PostMapping("/news/{id}")
+    public String edit(@RequestParam Long id, @RequestParam String title, @RequestParam(required = false) ArrayList<Long> categories,
+                       @RequestParam String lead, @RequestParam String content, @RequestParam MultipartFile image, @RequestParam(required = false) String writer) {
+        News newsItem = newsRepository.getOne(id);
+        newsService.updateNewsItem(newsItem, title, categories, lead, content, image, writer);
+        return "redirect:/news/" + id;
     }
 }

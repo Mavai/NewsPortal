@@ -37,9 +37,16 @@
             </ul>
         </div>
     </div>
-    <form th:action="@{/news/{id}(id=${newsItem.id})}" th:method="DELETE">
-        <button type="submit" class="btn btn-danger btn mr-auto">Delete</button>
-    </form>
+    <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group mr-2" role="group">
+                <a th:href="@{/news/{id}/edit(id=${newsItem.id})}" type="submit" class="btn btn-primary btn">Edit</a>
+        </div>
+        <div class="btn-group mr-2" role="group">
+            <form th:action="@{/news/{id}(id=${newsItem.id})}" th:method="DELETE">
+                <button type="submit" class="btn btn-danger btn">Delete</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 <div th:replace="base :: scripts"></div>

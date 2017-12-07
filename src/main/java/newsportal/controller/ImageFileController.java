@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.transaction.Transactional;
+
 @Controller
 public class ImageFileController {
 
@@ -16,6 +18,7 @@ public class ImageFileController {
 
     @GetMapping(path = "images/{id}", produces = {"image/jpg", "image/png"})
     @ResponseBody
+    @Transactional
     public byte[] get(@PathVariable Long id) {
         return imageFileRepository.getOne(id).getContent();
     }
