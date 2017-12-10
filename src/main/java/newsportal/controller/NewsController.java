@@ -9,13 +9,13 @@ import newsportal.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 
 @Controller
@@ -44,6 +44,7 @@ public class NewsController {
         return "form";
     }
 
+    @Secured("WRITER")
     @Transactional
     @PostMapping("/news/new")
     public String create(@RequestParam String title, @RequestParam(required = false) ArrayList<Long> categories, @RequestParam String lead,
@@ -63,6 +64,7 @@ public class NewsController {
         return "show";
     }
 
+    @Secured("WRITER")
     @DeleteMapping("/news/{id}")
     public String delete(@PathVariable(value = "id") Long id) {
         News newsItem = newsRepository.getOne(id);
@@ -81,6 +83,7 @@ public class NewsController {
         return "form";
     }
 
+    @Secured("")
     @Transactional
     @PostMapping("/news/{id}")
     public String edit(@RequestParam Long id, @RequestParam String title, @RequestParam(required = false) ArrayList<Long> categories,

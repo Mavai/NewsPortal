@@ -21,19 +21,31 @@
             <label for="title">Title</label>
             <input th:value="${newsItem.title}" type="text" class="form-control" id="title" name="title" required>
         </div>
-        <div class="form-group">
-            <label for="categories">Select categories</label>
-            <select multiple class="form-control" id="categories" name="categories">
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${newsItem.categories.contains(category)}"></option>
-            </select>
+        <div id="select_categories">
+            <label for="select_1">Categories</label>
+            <div class="form-group row" id="select_1" th:each="newsCategory, iter : ${newsItem.categories}">
+                <div class="col-5">
+                    <select class="form-control" name="categories">
+                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                th:text="${category.name}"
+                                th:selected="${category.name == newsCategory.name}"></option>
+                    </select>
+                </div>
+                <div class="col" th:if="${iter.index > 0}">
+                    <button type="button" class="btn btn-danger deleteButton">-</button>
+                </div>
+            </div>
         </div>
+        <button type="button" class="btn btn-primary" onclick="addNewCategorySelect(getLastSelectId)">+</button>
         <div class="form-group">
             <label for="lead">Lead</label>
-            <textarea th:text="${newsItem.lead}" class="form-control" id="lead" rows="3" name="lead" required></textarea>
+            <textarea th:text="${newsItem.lead}" class="form-control" id="lead" rows="3" name="lead"
+                      required></textarea>
         </div>
         <div class="form-group">
             <label for="content">Content</label>
-            <textarea th:text="${newsItem.content}" class="form-control" id="content" rows="10" name="content" required></textarea>
+            <textarea th:text="${newsItem.content}" class="form-control" id="content" rows="10" name="content"
+                      required></textarea>
         </div>
         <div class="row">
             <div class="col">
@@ -61,12 +73,19 @@
             <label for="title">Title</label>
             <input type="text" class="form-control" id="title" name="title" required>
         </div>
-        <div class="form-group">
-            <label for="categories">Select categories</label>
-            <select multiple class="form-control" id="categories" name="categories">
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">1</option>
-            </select>
+        <div id="select_categories">
+            <label for="select_1">Categories</label>
+            <div class="form-group row" id="select_1">
+                <div class="col-5">
+                    <select class="form-control" name="categories">
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
+                            1
+                        </option>
+                    </select>
+                </div>
+            </div>
         </div>
+        <button type="button" class="btn btn-primary" onclick="addNewCategorySelect(getLastSelectId)">+</button>
         <div class="form-group">
             <label for="lead">Lead</label>
             <textarea class="form-control" id="lead" rows="3" name="lead" required></textarea>
@@ -92,5 +111,7 @@
 </div>
 
 <div th:replace="base :: scripts"></div>
+<script th:src="@{/javascript/scripts.js}" defer></script>
+
 </body>
 </html>

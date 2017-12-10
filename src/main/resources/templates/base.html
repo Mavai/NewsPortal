@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
 <head>
     <meta charset="UTF-8">
     <title>Main page</title>
@@ -16,7 +17,29 @@
                 <a class="nav-link" th:href="@{'/category/' + ${category.id}}" th:text="${category.name}">Category 1</a>
             </li>
         </ul>
-        <a th:href="@{/news/new}" class="btn btn-primary my-2 my-sm-0" role="button">Add a news item</a>
+        <div sec:authorize="isAnonymous()" class="btn-toolbar" role="toolbar">
+            <div class="btn-group mr-2" role="group">
+                <a th:href="@{/register}" class="btn btn-primary my-2 my-sm-0"
+                   role="button">Register</a>
+            </div>
+            <div class="btn-group mr-2" role="group">
+                <a th:href="@{/login}" class="btn btn-primary my-2 my-sm-0" role="button">Login</a>
+            </div>
+        </div>
+        <div sec:authorize="hasAnyAuthority('WRITER')" class="btn-toolbar" role="toolbar">
+            <div class="btn-group mr-2" role="group">
+                <a th:href="@{/news/new}" class="btn btn-primary my-2 my-sm-0"
+                   role="button">Add a news item</a>
+            </div>
+            <div class="btn-group mr-2" role="group">
+                <form th:action="@{/logout}" th:method="POST">
+                    <button type="submit" class="btn btn-danger btn">Logout</button>
+                </form>
+            </div>
+        </div>
+
+
+
     </nav>
 </header>
 

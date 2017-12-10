@@ -26,7 +26,7 @@ public class News implements Serializable{
     private ImageFile image;
 
     @ManyToMany(mappedBy = "newsItems")
-    private List<User> writers;
+    private List<Writer> writers;
 
     @ManyToMany(mappedBy = "newsItems")
     private List<Category> categories;

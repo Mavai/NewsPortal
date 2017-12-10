@@ -3,17 +3,18 @@ package newsportal.service;
 import newsportal.model.Category;
 import newsportal.model.ImageFile;
 import newsportal.model.News;
-import newsportal.model.User;
 import newsportal.repository.CategoryRepository;
 import newsportal.repository.ImageFileRepository;
 import newsportal.repository.NewsRepository;
-import newsportal.repository.UserRepository;
+import newsportal.repository.WriterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class NewsService {
@@ -25,7 +26,7 @@ public class NewsService {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
-    UserRepository userRepository;
+    WriterRepository writerRepository;
 
     public News createNewsItem(String title, ArrayList<Long> categories, String lead, String content, MultipartFile image, String writer) {
         News newsItem = new News();
@@ -68,7 +69,8 @@ public class NewsService {
     private void addCategories(News newsItem, ArrayList<Long> categories) {
         if (categories != null) {
             deleteCategories(newsItem);
-            for (Long categoryId : categories) {
+            Set<Long> set = new HashSet<>(categories);
+            for (Long categoryId : set) {
                 newsItem.setCategories(new ArrayList<>());
                 Category category = categoryRepository.getOne(categoryId);
                 newsItem.getCategories().add(category);
