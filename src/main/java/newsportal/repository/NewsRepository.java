@@ -13,17 +13,17 @@ public interface NewsRepository extends JpaRepository<News, Long>{
 
     List<News> findAllByCategories(Category category, Pageable pageable);
 
-    @Query(value = "SELECT n.id, n.content, n.lead, n.title, n.image_Id, n.publish_Time, v.news_Item_Id, Count(v.news_Item_Id) AS viewCount FROM News n"
+    @Query(value = "SELECT n.id, n.content, n.lead, n.title, n.image_Id, n.publish_Time, Count(v.news_Item_Id) AS viewCount FROM News n"
             + " LEFT JOIN View v"
             + " ON n.id = v.news_Item_Id"
-            + " WHERE v.view_Time >= DATEADD(week, -1, CURRENT_TIMESTAMP)"
+            + " WHERE v.view_Time >= (CURRENT_DATE - INTERVAL '1 week')"
             + " GROUP BY n.id"
             + " ORDER BY viewCount DESC /*#pageable*/",
-            countQuery = "SELECT COUNT(*) FROM News n, View v WHERE v.view_Time >= DATEADD(week, -1, CURRENT_TIMESTAMP)",
+            countQuery = "SELECT COUNT(*) FROM News n, View v WHERE v.view_Time >= (CURRENT_DATE - INTERVAL '1 week')",
             nativeQuery = true)
     List<News> findAllOrderedByViewCountFromLastWeek(Pageable pageable);
 
-    @Query(value = "SELECT n.id, n.content, n.lead, n.title, n.image_Id, n.publish_Time, v.news_Item_Id, Count(v.news_Item_Id) AS viewCount"
+    @Query(value = "SELECT n.id, n.content, n.lead, n.title, n.image_Id, n.publish_Time, Count(v.news_Item_Id) AS viewCount"
             + " FROM News n"
             + " LEFT JOIN View v"
             + " ON n.id = v.news_Item_Id"
@@ -38,4 +38,6 @@ public interface NewsRepository extends JpaRepository<News, Long>{
             countQuery = "SELECT COUNT(*) FROM News n, View v WHERE v.view_Time >= DATEADD(week, -1, CURRENT_TIMESTAMP)",
             nativeQuery = true)
     List<News> findAllByCategoryOrderedByViewCountFromLastWeek(@Param("categoryId") Long categoryId, Pageable pageable);
+
+
 }

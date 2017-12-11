@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class NewsService {
         return newsItem;
     }
 
-    private void addImage(News newsItem, MultipartFile image) throws IOException {
+    public void addImage(News newsItem, MultipartFile image) throws IOException {
         if (image.getBytes().length != 0) {
             ImageFile imageFile = new ImageFile();
             imageFile.setContent(image.getBytes());

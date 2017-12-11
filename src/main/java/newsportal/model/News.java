@@ -17,6 +17,8 @@ import java.util.List;
 public class News implements Serializable{
     private LocalDateTime publishTime;
 
+    private Integer viewCount;
+
     @OneToMany(mappedBy = "newsItem")
     private List<View> views;
 

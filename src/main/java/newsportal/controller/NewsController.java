@@ -3,6 +3,7 @@ package newsportal.controller;
 import newsportal.model.Category;
 import newsportal.model.News;
 import newsportal.model.View;
+import newsportal.model.Writer;
 import newsportal.repository.*;
 import newsportal.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,24 @@ public class NewsController {
 
     @GetMapping("/news")
     public String list(Model model) {
-        model.addAttribute("latestNews", newsRepository.findAll(PageRequest.of(0, 10, Sort.Direction.DESC, "publishTime", "views")));
-        model.addAttribute("topNews", newsRepository.findAllOrderedByViewCountFromLastWeek(PageRequest.of(0, 10)));
+        model.addAttribute("latestNews", newsRepository.findAll(
+                PageRequest.of(0, 10, Sort.Direction.DESC, "publishTime")));
+        model.addAttribute("topNews", newsRepository.findAllOrderedByViewCountFromLastWeek(
+                PageRequest.of(0, 10)));
         model.addAttribute("categories", categoryRepository.findAll());
         return "index";
+    }
+
+    @GetMapping("/news/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        News newsItem = newsRepository.findById(id).get();
+        View view = new View();
+        view.setViewTime(LocalDateTime.now());
+        view.setNewsItem(newsItem);
+        viewRepository.save(view);
+        model.addAttribute("newsItem", newsItem);
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "show";
     }
 
     @Secured("WRITER")
@@ -73,22 +88,10 @@ public class NewsController {
         }
         News newsItem = newsService.createNewsItem(title, categories, lead, content, newsImage, writers);
         newsRepository.save(newsItem);
-        return "redirect:/news";
+        return "redirect:/news/" + newsItem.getId();
     }
 
     @Transactional
-    @GetMapping("/news/{id}")
-    public String show(@PathVariable Long id, Model model) {
-        News newsItem = newsRepository.getOne(id);
-        View view = new View();
-        view.setViewTime(LocalDateTime.now());
-        view.setNewsItem(newsItem);
-        viewRepository.save(view);
-        model.addAttribute("newsItem", newsItem);
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "show";
-    }
-
     @Secured("WRITER")
     @DeleteMapping("/news/{id}")
     public String delete(@PathVariable(value = "id") Long id) {
@@ -98,6 +101,9 @@ public class NewsController {
         }
         for (View view : newsItem.getViews()) {
             viewRepository.delete(view);
+        }
+        for (Writer writer : newsItem.getWriters()) {
+            writer.getNewsItems().remove(newsItem);
         }
         newsRepository.deleteById(id);
         return "redirect:/news";
@@ -118,7 +124,7 @@ public class NewsController {
     @PostMapping("/news/{id}")
     public String edit(@Valid @ModelAttribute("modelNewsItem") News modelNewsItem, BindingResult bindingResult, @RequestParam Long id,
                        @RequestParam String title, @RequestParam HashSet<Long> categories, @RequestParam String lead,
-                       @RequestParam String content, @RequestParam MultipartFile image, @RequestParam HashSet<Long> writers,
+                       @RequestParam String content, @RequestParam MultipartFile newsImage, @RequestParam HashSet<Long> writers,
                        Model model) throws IOException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryRepository.findAll());
@@ -126,7 +132,7 @@ public class NewsController {
             return "form";
         }
         News newsItem = newsRepository.getOne(id);
-        newsService.updateNewsItem(newsItem, title, categories, lead, content, image, writers);
+        newsService.updateNewsItem(newsItem, title, categories, lead, content, newsImage, writers);
         return "redirect:/news/" + id;
     }
 }

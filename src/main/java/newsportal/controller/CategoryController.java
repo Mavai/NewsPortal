@@ -24,8 +24,10 @@ public class CategoryController {
     @GetMapping("/category/{id}")
     public String show(@PathVariable Long id, Model model) {
         Category category = categoryRepository.getOne(id);
-        model.addAttribute("latestNews", newsRepository.findAllByCategories(category, PageRequest.of(0,10, Sort.Direction.DESC, "publishTime", "views")));
-        model.addAttribute("topNews", newsRepository.findAllByCategoryOrderedByViewCountFromLastWeek(category.getId(), PageRequest.of(0,10)));
+        model.addAttribute("latestNews", newsRepository.findAllByCategories(category,
+                PageRequest.of(0,10, Sort.Direction.DESC, "publishTime")));
+        model.addAttribute("topNews", newsRepository.findAllByCategoryOrderedByViewCountFromLastWeek(category.getId(),
+                PageRequest.of(0,10, Sort.Direction.DESC, "viewCount")));
         model.addAttribute("categories", categoryRepository.findAll());
         return "index";
     }
