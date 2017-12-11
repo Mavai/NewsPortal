@@ -25,8 +25,8 @@ public class CategoryController {
     public String show(@PathVariable Long id, Model model) {
         Category category = categoryRepository.getOne(id);
         model.addAttribute("latestNews", newsRepository.findAllByCategories(category, PageRequest.of(0,10, Sort.Direction.DESC, "publishTime", "views")));
-        model.addAttribute("topNews", newsRepository.findAllByCategories(category, PageRequest.of(0,10, Sort.Direction.DESC, "views")));
+        model.addAttribute("topNews", newsRepository.findAllByCategoryOrderedByViewCountFromLastWeek(category.getId(), PageRequest.of(0,10)));
         model.addAttribute("categories", categoryRepository.findAll());
-        return "showCategory";
+        return "index";
     }
 }

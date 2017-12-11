@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
 <head>
     <meta charset="UTF-8">
     <title>NewsPortal</title>
@@ -20,7 +21,7 @@
             <h2 th:text="${newsItem.title}">Title</h2>
 
             <h4 th:text="${newsItem.lead}">Lead</h4>
-            <p th:text="'Published: ' + ${newsItem.publishTime}"></p>
+            <p th:text="'Published: ' + ${newsItem.getFormattedPublishTime()}"></p>
 
             <p th:text="${newsItem.content}">Content</p>
 
@@ -37,9 +38,9 @@
             </ul>
         </div>
     </div>
-    <div class="btn-toolbar" role="toolbar">
+    <div class="btn-toolbar" role="toolbar" sec:authorize="hasAnyAuthority('WRITER')">
         <div class="btn-group mr-2" role="group">
-                <a th:href="@{/news/{id}/edit(id=${newsItem.id})}" type="submit" class="btn btn-primary btn">Edit</a>
+            <a th:href="@{/news/{id}/edit(id=${newsItem.id})}" type="submit" class="btn btn-primary btn">Edit</a>
         </div>
         <div class="btn-group mr-2" role="group">
             <form th:action="@{/news/{id}(id=${newsItem.id})}" th:method="DELETE">

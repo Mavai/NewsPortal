@@ -1,8 +1,8 @@
 var selectCount = 1;
 
-function addNewCategorySelect(lastSelectId) {
-    var select = $("#select_categories");
-    var categories_select = $("#select_categories [id^=select]:last").clone(true, true);
+function addNewCategorySelect(string) {
+    var select = $("#" + string);
+    var categories_select = $("#" + string + " [id^=select]:last").clone(true, true);
     categories_select.attr("id", "select_" + ++selectCount);
     if (selectCount == 2) {
         var div = $("<div/>").addClass("col");

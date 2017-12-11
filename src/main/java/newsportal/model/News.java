@@ -2,21 +2,35 @@ package newsportal.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
 @Entity
-@Data(staticConstructor="of")
+@Data
 public class News implements Serializable{
-    private String title;
-    private String lead;
-    private String content;
     private LocalDateTime publishTime;
-    private Integer views;
+
+    @OneToMany(mappedBy = "newsItem")
+    private List<View> views;
+
+    @NotEmpty
+    @Size(min = 4, max = 100)
+    private String title;
+
+    @NotEmpty
+    @Size(min = 4, max = 1000)
+    private String lead;
+
+    @NotEmpty
+    @Size(min = 4, max = 10000)
+    private String content;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +39,11 @@ public class News implements Serializable{
     @OneToOne
     private ImageFile image;
 
+    @NotEmpty
     @ManyToMany(mappedBy = "newsItems")
     private List<Writer> writers;
 
+    @NotEmpty
     @ManyToMany(mappedBy = "newsItems")
     private List<Category> categories;
 
@@ -35,16 +51,7 @@ public class News implements Serializable{
         this.title = title;
     }
 
-    public void incrementViews() {
-        if (this.views == null) {
-            this.views = 0;
-        } else {
-            this.views++;
-        }
-    }
-
-    public String getPublishTime() {
-        return publishTime.getDayOfMonth() + "." + publishTime.getMonthValue() + "." + publishTime.getYear() +
-                " at " + publishTime.getHour() + ":" + publishTime.getMinute();
+    public String getFormattedPublishTime() {
+        return publishTime.getDayOfMonth() + "." + publishTime.getMonthValue() + "." + publishTime.getYear();
     }
 }

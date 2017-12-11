@@ -1,6 +1,7 @@
 package newsportal.controller;
 
 import newsportal.model.Writer;
+import newsportal.repository.NewsRepository;
 import newsportal.repository.WriterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,9 @@ public class DefaultController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private NewsRepository newsRepository;
+
     @PostConstruct
     public void init() {
         if (writerRepository.findByName("user") != null) {
@@ -25,7 +29,7 @@ public class DefaultController {
         }
         Writer writer = new Writer();
         writer.setName("user");
-        writer.setPassword(passwordEncoder.encode("larry"));
+        writer.setPassword(passwordEncoder.encode("password"));
         writerRepository.save(writer);
     }
 
