@@ -57,11 +57,11 @@ public class NewsService {
         }
     }
 
-    private void addCategories(News newsItem, HashSet<Long> categories) {
+    public void addCategories(News newsItem, HashSet<Long> categories) {
         if (categories != null) {
             deleteCategories(newsItem);
+            newsItem.setCategories(new ArrayList<>());
             for (Long categoryId : categories) {
-                newsItem.setCategories(new ArrayList<>());
                 Category category = categoryRepository.getOne(categoryId);
                 newsItem.getCategories().add(category);
                 category.getNewsItems().add(newsItem);
@@ -69,7 +69,7 @@ public class NewsService {
         }
     }
 
-    private void addWriters(News newsItem, HashSet<Long> writers) {
+    public void addWriters(News newsItem, HashSet<Long> writers) {
         if (writers != null) {
             deleteWriters(newsItem);
             for (Long writerId : writers) {
@@ -81,7 +81,7 @@ public class NewsService {
         }
     }
 
-    private void deleteCategories(News newsItem) {
+    public void deleteCategories(News newsItem) {
         if (newsItem.getCategories() != null) {
             for (Category category : newsItem.getCategories()) {
                 category.getNewsItems().remove(newsItem);
@@ -89,7 +89,7 @@ public class NewsService {
         }
     }
 
-    private void deleteWriters(News newsItem) {
+    public void deleteWriters(News newsItem) {
         if (newsItem.getWriters() != null) {
             for (Writer writer : newsItem.getWriters()) {
                 writer.getNewsItems().remove(newsItem);

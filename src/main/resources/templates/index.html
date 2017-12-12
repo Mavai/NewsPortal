@@ -34,7 +34,8 @@
                 <ul class="list">
                     <h3>Most viewed</h3>
                     <li class="list-group-item" th:each="newsItem : ${topNews}">
-                        <h6><a th:href="@{/news/{id}(id=${newsItem.id})}" th:text="${newsItem.title}"></h6>
+                        <h6><a th:href="@{/news/{id}(id=${newsItem.id})}" th:text="${newsItem.title}"/></h6>
+                        <p th:text="${newsItem.getFormattedPublishTime()}"></p>
                     </li>
                 </ul>
             </div>

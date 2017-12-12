@@ -18,10 +18,10 @@ public interface NewsRepository extends JpaRepository<News, Long>{
             + " FROM News n"
             + " LEFT JOIN View v"
             + " ON n.id = v.news_Item_Id"
-            + " WHERE v.view_Time >= (CURRENT_DATE - INTERVAL '1 week')"
+            + " WHERE v.view_Time >= (CURRENT_DATE)"
             + " GROUP BY n.id"
             + " ORDER BY view_Count DESC /*#pageable*/",
-            countQuery = "SELECT COUNT(*) FROM News n, View v WHERE v.view_Time >= (CURRENT_DATE - INTERVAL '1 week')",
+            countQuery = "SELECT COUNT(*) FROM News n, View v WHERE v.view_Time >= (CURRENT_DATE)",
             nativeQuery = true)
     List<News> findAllOrderedByViewCountFromLastWeek(Pageable pageable);
 

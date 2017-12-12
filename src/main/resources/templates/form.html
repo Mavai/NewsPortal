@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="addNewCategorySelect(getLastSelectId)">+</button>
+        <button type="button" class="btn btn-primary" onclick="addNewCategorySelect('select_writers')">+</button>
         <div class="form-group">
             <label for="title">Title</label>
             <input th:value="${newsItem.title}" type="text" class="form-control" id="title" name="title">
@@ -55,7 +55,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="addNewCategorySelect(getLastSelectId)">+</button>
+        <button type="button" class="btn btn-primary" onclick="addNewCategorySelect('select_categories')">+</button>
         <div class="form-group">
             <label for="lead">Lead</label>
             <textarea th:text="${newsItem.lead}" class="form-control" id="lead" rows="3" name="lead"
