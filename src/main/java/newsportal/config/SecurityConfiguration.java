@@ -27,7 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/news/new").authenticated()
                 .anyRequest().permitAll();
-        http.formLogin().permitAll().and().logout().logoutUrl("/logout").logoutSuccessUrl("/news");
+        http.formLogin().permitAll().and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
     }
 
     @Autowired

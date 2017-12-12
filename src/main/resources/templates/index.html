@@ -5,6 +5,7 @@
     <title>NewsPortal</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
           integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/pagination.css}">
 </head>
 <body>
 <header th:replace="base :: header"></header>
@@ -31,13 +32,21 @@
         <div class="col">
             <div class="row">
                 <ul class="list">
-                    <h3>Most read</h3>
+                    <h3>Most viewed</h3>
                     <li class="list-group-item" th:each="newsItem : ${topNews}">
                         <h6><a th:href="@{/news/{id}(id=${newsItem.id})}" th:text="${newsItem.title}"></h6>
                     </li>
                 </ul>
             </div>
         </div>
+    </div>
+    <div class="row"><br></div>
+    <div class="text-center">
+        <ul class="list-group-horizontal">
+            <li class="list-group-item" th:each="i : ${#numbers.sequence(1, pageCount)}">
+                <h6><a th:href="@{/news/page/{page}(page=${i})}" th:text="${i}"></h6>
+            </li>
+        </ul>
     </div>
 </div>
 

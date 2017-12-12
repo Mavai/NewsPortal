@@ -41,12 +41,31 @@
     </div>
     <div class="btn-toolbar" role="toolbar" sec:authorize="hasAnyAuthority('WRITER')">
         <div class="btn-group mr-2" role="group">
-            <a th:href="@{/news/{id}/edit(id=${newsItem.id})}" type="submit" class="btn btn-primary btn">Edit</a>
+            <a th:href="@{/news/{id}/edit(id=${newsItem.id})}" type="submit"
+               class="btn btn-primary btn">Edit</a>
         </div>
         <div class="btn-group mr-2" role="group">
             <form th:action="@{/news/{id}(id=${newsItem.id})}" th:method="DELETE">
                 <button type="submit" class="btn btn-danger btn">Delete</button>
             </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <ul class="list">
+                <h3>Newest</h3>
+                <li class="list-group-item" th:each="newsItem : ${latestNews}">
+                    <h6><a th:href="@{/news/{id}(id=${newsItem.id})}" th:text="${newsItem.title}"/></h6>
+                </li>
+            </ul>
+        </div>
+        <div class="col">
+            <ul class="list">
+                <h3>Most viewed</h3>
+                <li class="list-group-item" th:each="newsItem : ${topNews}">
+                    <h6><a th:href="@{/news/{id}(id=${newsItem.id})}" th:text="${newsItem.title}"/></h6>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

@@ -1,23 +1,15 @@
 package newsportal.service;
 
-import newsportal.model.Category;
-import newsportal.model.ImageFile;
-import newsportal.model.News;
-import newsportal.model.Writer;
-import newsportal.repository.CategoryRepository;
-import newsportal.repository.ImageFileRepository;
-import newsportal.repository.NewsRepository;
-import newsportal.repository.WriterRepository;
+import newsportal.model.*;
+import newsportal.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class NewsService {
@@ -30,6 +22,8 @@ public class NewsService {
     CategoryRepository categoryRepository;
     @Autowired
     WriterRepository writerRepository;
+    @Autowired
+    ViewRepository viewRepository;
 
     public News createNewsItem(String title, HashSet<Long> categories, String lead, String content, MultipartFile image,
                                HashSet<Long> writers) throws IOException {
@@ -100,6 +94,18 @@ public class NewsService {
             for (Writer writer : newsItem.getWriters()) {
                 writer.getNewsItems().remove(newsItem);
             }
+        }
+    }
+
+    public void deleteReferences(News newsItem) {
+        for (Category category : newsItem.getCategories()) {
+            category.getNewsItems().remove(newsItem);
+        }
+        for (View view : newsItem.getViews()) {
+            viewRepository.delete(view);
+        }
+        for (Writer writer : newsItem.getWriters()) {
+            writer.getNewsItems().remove(newsItem);
         }
     }
 }

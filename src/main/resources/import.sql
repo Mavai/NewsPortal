@@ -9,15 +9,18 @@ INSERT INTO News (Title, Lead, Content, Publish_Time) VALUES ('Fake News 2', 'Le
 INSERT INTO News (Title, Lead, Content, Publish_Time) VALUES ('Fake News 3', 'Lead', 'Content', CURRENT_TIMESTAMP)
 INSERT INTO News (Title, Lead, Content, Publish_Time) VALUES ('Fake News 4', 'Lead', 'Content', CURRENT_TIMESTAMP)
 INSERT INTO News (Title, Lead, Content, Publish_Time) VALUES ('Fake News 5', 'Lead', 'Content', CURRENT_TIMESTAMP)
+INSERT INTO News (Title, Lead, Content, Publish_Time) VALUES ('Fake News 6', 'Lead', 'Content', CURRENT_TIMESTAMP)
 
 INSERT INTO View (View_Time, News_Item_Id) VALUES (CURRENT_TIMESTAMP, 1)
 INSERT INTO View (View_Time, News_Item_Id) VALUES (CURRENT_TIMESTAMP, 2)
 INSERT INTO View (View_Time, News_Item_Id) VALUES (CURRENT_TIMESTAMP, 3)
 INSERT INTO View (View_Time, News_Item_Id) VALUES (CURRENT_TIMESTAMP, 4)
 INSERT INTO View (View_Time, News_Item_Id) VALUES (CURRENT_TIMESTAMP, 5)
+INSERT INTO View (View_Time, News_Item_Id) VALUES (CURRENT_TIMESTAMP, 6)
 
 INSERT INTO Category_NEWS_ITEMS (Categories_Id, News_Items_Id) VALUES (1, 1)
 INSERT INTO Category_News_Items (Categories_Id, News_Items_Id) VALUES (2, 2)
 INSERT INTO Category_News_Items (Categories_Id, News_Items_Id) VALUES (3, 3)
 INSERT INTO Category_News_Items (Categories_Id, News_Items_Id) VALUES (4, 4)
 INSERT INTO Category_News_Items (Categories_Id, News_Items_Id) VALUES (5, 5)
+INSERT INTO Category_News_Items (Categories_Id, News_Items_Id) VALUES (1, 6)

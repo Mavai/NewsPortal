@@ -1,12 +1,11 @@
 package newsportal.controller;
 
-import newsportal.model.Category;
 import newsportal.model.News;
 import newsportal.model.View;
-import newsportal.model.Writer;
 import newsportal.repository.*;
 import newsportal.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
@@ -20,12 +19,11 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 @Controller
 public class NewsController {
+    public static final int PAGE_SIZE = 5;
 
     @Autowired
     NewsRepository newsRepository;
@@ -45,13 +43,14 @@ public class NewsController {
         return new News();
     }
 
-    @GetMapping("/news")
-    public String list(Model model) {
-        model.addAttribute("latestNews", newsRepository.findAll(
-                PageRequest.of(0, 10, Sort.Direction.DESC, "publishTime")));
+    @GetMapping("/news/page/{page}")
+    public String list(Model model, @PathVariable Integer page) {
+        Page latestNews = newsRepository.findAll(PageRequest.of(page - 1, PAGE_SIZE, Sort.Direction.DESC, "publishTime"));
+        model.addAttribute("latestNews", latestNews);
         model.addAttribute("topNews", newsRepository.findAllOrderedByViewCountFromLastWeek(
-                PageRequest.of(0, 10)));
+                PageRequest.of(page - 1, PAGE_SIZE)));
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("pageCount", (newsRepository.findAll().size() / PAGE_SIZE) + 1);
         return "index";
     }
 
@@ -64,6 +63,10 @@ public class NewsController {
         viewRepository.save(view);
         model.addAttribute("newsItem", newsItem);
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("latestNews", newsRepository.findAll(
+                PageRequest.of(0, 5, Sort.Direction.DESC, "publishTime")));
+        model.addAttribute("topNews", newsRepository.findAllOrderedByViewCountFromLastWeek(
+                PageRequest.of(0, 5)));
         return "show";
     }
 
@@ -96,23 +99,17 @@ public class NewsController {
     @DeleteMapping("/news/{id}")
     public String delete(@PathVariable(value = "id") Long id) {
         News newsItem = newsRepository.getOne(id);
-        for (Category category : newsItem.getCategories()) {
-            category.getNewsItems().remove(newsItem);
-        }
-        for (View view : newsItem.getViews()) {
-            viewRepository.delete(view);
-        }
-        for (Writer writer : newsItem.getWriters()) {
-            writer.getNewsItems().remove(newsItem);
-        }
+        newsService.deleteReferences(newsItem);
         newsRepository.deleteById(id);
-        return "redirect:/news";
+        return "redirect:/";
     }
+
+
 
     @Secured("WRITER")
     @GetMapping("/news/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
-        News newsItem = newsRepository.getOne(id);
+        News newsItem = newsRepository.findById(id).get();
         model.addAttribute("newsItem", newsItem);
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("writers", writerRepository.findAll());

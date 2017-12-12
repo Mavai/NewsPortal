@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,9 +43,13 @@ public class WriterController {
         if (bindingResult.hasErrors()) {
             return "register";
         }
+        if (writerRepository.findByName(writer.getName()) != null) {
+            bindingResult.rejectValue("name", "error.writer", "Already exists.");
+            return "register";
+        }
         writer.setPassword(passwordEncoder.encode(writer.getPassword()));
         writerRepository.save(writer);
         securityService.autologin(name, password);
-        return "redirect:/news";
+        return "redirect:/";
     }
 }

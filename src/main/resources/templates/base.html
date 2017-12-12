@@ -11,10 +11,10 @@
 
 <header th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" th:href="@{/news}">NewsPortal</a>
+        <a class="navbar-brand" th:href="@{/}">NewsPortal</a>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item" th:each="category : ${categories}">
-                <a class="nav-link" th:href="@{'/category/' + ${category.id}}" th:text="${category.name}">Category 1</a>
+                <a class="nav-link" th:href="@{'/category/' + ${category.id}} + '/page/1'" th:text="${category.name}">Category 1</a>
             </li>
         </ul>
         <div sec:authorize="isAnonymous()" class="btn-toolbar" role="toolbar">
