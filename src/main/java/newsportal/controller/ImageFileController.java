@@ -20,6 +20,6 @@ public class ImageFileController {
     @ResponseBody
     @Transactional
     public byte[] get(@PathVariable Long id) {
-        return imageFileRepository.getOne(id).getContent();
+        return imageFileRepository.findById(id).get().getContent();
     }
 }

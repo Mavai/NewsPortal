@@ -72,8 +72,8 @@ public class NewsService {
     public void addWriters(News newsItem, HashSet<Long> writers) {
         if (writers != null) {
             deleteWriters(newsItem);
+            newsItem.setWriters(new ArrayList<>());
             for (Long writerId : writers) {
-                newsItem.setWriters(new ArrayList<>());
                 Writer writer = writerRepository.getOne(writerId);
                 newsItem.getWriters().add(writer);
                 writer.getNewsItems().add(newsItem);

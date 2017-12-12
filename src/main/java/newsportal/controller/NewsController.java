@@ -45,6 +45,7 @@ public class NewsController {
 
     @GetMapping("/news/page/{page}")
     public String list(Model model, @PathVariable Integer page) {
+        newsRepository.findAll(); //Without this Postgresql throws "Unable to access lob stream"
         Page latestNews = newsRepository.findAll(PageRequest.of(page - 1, PAGE_SIZE, Sort.Direction.DESC, "publishTime"));
         model.addAttribute("latestNews", latestNews);
         model.addAttribute("topNews", newsRepository.findAllOrderedByViewCountFromLastWeek(
@@ -56,6 +57,7 @@ public class NewsController {
 
     @GetMapping("/news/{id}")
     public String show(@PathVariable Long id, Model model) {
+        newsRepository.findAll(); //Without this Postgresql throws "Unable to access lob stream"
         News newsItem = newsRepository.findById(id).get();
         View view = new View();
         view.setViewTime(LocalDateTime.now());

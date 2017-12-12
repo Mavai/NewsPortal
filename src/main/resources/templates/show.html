@@ -18,13 +18,19 @@
 <div class="container">
     <div class="row">
         <div class="col-9">
-            <h2 th:text="${newsItem.title}">Title</h2>
+            <h1 th:text="${newsItem.title}">Title</h1>
 
-            <h4 th:text="${newsItem.lead}">Lead</h4>
+            <h5 th:text="${newsItem.lead}">Lead</h5>
             <p th:text="'Published: ' + ${newsItem.getFormattedPublishTime()}"></p>
 
             <p th:text="${newsItem.content}">Content</p>
-
+            <br>
+            <h7>Writers:</h7>
+            <ul class="list">
+                <li class="list-item" th:each="writer : ${newsItem.writers}">
+                    <p th:text="${writer.name}"></p>
+                </li>
+            </ul>
             <div th:if="${newsItem.image != null}">
                 <img th:src="@{/images/{id}(id=${newsItem.image.id})}"/>
             </div>

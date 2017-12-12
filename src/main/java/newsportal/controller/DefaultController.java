@@ -4,6 +4,7 @@ import newsportal.model.Writer;
 import newsportal.repository.WriterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.PostConstruct;
 
 @Controller
+@Profile("default")
 public class DefaultController {
 
     @Autowired
@@ -19,7 +21,9 @@ public class DefaultController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Profile("default")
+    @Autowired
+    Environment environment;
+
     @PostConstruct
     public void init() {
         if (writerRepository.findByName("user") != null) {
@@ -36,3 +40,5 @@ public class DefaultController {
         return "redirect:/news/page/1";
     }
 }
+
+
