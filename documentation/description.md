@@ -3,7 +3,7 @@
 
 
 Aiheena oli uutissivusto, jonne voi kirjautua ja tämän jälkeen lisätä uutisia. Uutisiin liittyy otsikko, 
-ingressi, sisältö, yksi tai useampi aihe, yksi taiuseampi kirjoittaja ja kuva.
+ingressi, sisältö, yksi tai useampi aihe, yksi tai useampi kirjoittaja ja kuva.
 
 
 
